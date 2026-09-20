@@ -1,4 +1,14 @@
-import { Controller, Get, Put, Delete, Body, Param, UseGuards, Request } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Put,
+  Delete,
+  Body,
+  Param,
+  UseGuards,
+  Request,
+  ForbiddenException,
+} from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { UsersService } from './users.service';
 
@@ -23,11 +33,17 @@ export class UsersController {
     @Body() body: { name: string; email: string },
     @Request() req: any,
   ) {
+    if (req.user.userId !== id) {
+      throw new ForbiddenException('You can only update your own account');
+    }
     return this.usersService.update(id, body.name, body.email);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id') id: string, @Request() req: any) {
+    if (req.user.userId !== id) {
+      throw new ForbiddenException('You can only delete your own account');
+    }
     return this.usersService.remove(id);
   }
 }
