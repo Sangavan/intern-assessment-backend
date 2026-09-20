@@ -25,7 +25,7 @@ cd intern-assessment-backend
 npm install
 ```
 
-### 3. Create `.env` file
+### 3. Create `.env` file (use `.env.example` as reference)
 ```env
 MONGODB_URI=your_mongodb_connection_string
 JWT_SECRET=your_jwt_secret
